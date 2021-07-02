@@ -52,7 +52,6 @@ services:
       POSTGRES_DB: jibberjabberdb_posts
     volumes:
       - postData:/var/lib/postgresql/data
-#  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
 
   jj-user:
     container_name: jj-user
