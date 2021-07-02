@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   jibber-jabber-client:
-    container_name: jj-client
+    container_name: jibber-jabber-client
     image: docker.pkg.github.com/matiasferron/jj-front/dev-jj-fe:latest
     ports:
       - 1337:80
