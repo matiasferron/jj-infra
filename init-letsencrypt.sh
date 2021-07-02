@@ -39,7 +39,7 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose -f docker-compose.dev.yml up --force-recreate -d nginx
+docker-compose -f docker-compose.dev.yml up --force-recreate -d jibber-jabber-proxy
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
@@ -77,4 +77,4 @@ docker-compose -f docker-compose.dev.yml run --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-docker-compose -f docker-compose.dev.yml exec nginx nginx -s reload
+docker-compose -f docker-compose.dev.yml exec jibber-jabber-proxy nginx -s reload
