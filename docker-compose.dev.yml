@@ -77,9 +77,10 @@ services:
       - pgdata:/var/lib/postgresql/data
 
 
-  volumes:
-    postData:
-      external: true
-    pgdata:
-      external: true
+
+volumes:
+  postData:
+    external: true
+  pgdata:
+    external: true
         
