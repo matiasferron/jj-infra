@@ -1,0 +1,85 @@
+version: '3.7'
+
+services:
+  jibber-jabber-client:
+    container_name: jj-client
+    image: docker.pkg.github.com/matiasferron/jj-front/dev-jj-fe:latest
+    ports:
+      - 1337:80
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  jj-posts:
+    container_name: jj-posts
+    image: docker.pkg.github.com/tomasgp97/jj-post-service/dev-jj-post-service:latest
+    ports:
+      - 8082:8080
+    environment:
+      DB_USER: jibberjabber
+      DB_PASSWORD: jibberjabber
+      DB_NAME: jibberjabberdb_posts
+      DB_HOST: postgres_db
+      DB_PORT: 5432
+
+
+  db-posts:
+    container_name: postgres_db_posts
+    image: postgres:12
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: jibberjabber
+      POSTGRES_PASSWORD: jibberjabber
+      POSTGRES_DB: jibberjabberdb_posts
+    volumes:
+      - postData:/var/lib/postgresql/data
+
+
+  jj-user:
+    container_name: jj-user
+    image: docker.pkg.github.com/tomasgp97/jj-user-service/dev-jj-user-service:latest
+    ports:
+      - 8081:8080
+      environment:
+        DB_USER: jibberjabber
+        DB_PASSWORD: jibberjabber
+        DB_NAME: jibberjabberdb
+        DB_HOST: postgres_db
+        DB_PORT: 5432
+
+  db-users:
+    container_name: postgres_db
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: jibberjabber
+      POSTGRES_PASSWORD: jibberjabber
+      POSTGRES_DB: jibberjabberdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+  volumes:
+    postData:
+      external: true
+     pgdata:
+      external: true
+        
