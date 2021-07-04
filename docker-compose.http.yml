@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+  jibber-jabber-client:
+    container_name: jibber-jabber-client
+    image: docker.pkg.github.com/matiasferron/jj-front/dev-jj-fe:latest
+    ports:
+      - 1337:80
+
+  jj-posts:
+    container_name: jj-posts
+    image: docker.pkg.github.com/tomasgp97/jj-post-service/dev-jj-post-service:latest
+    ports:
+      - 8082:8082
+    environment:
+      DB_USER: jibberjabber
+      DB_PASSWORD: jibberjabber
+      DB_NAME: jibberjabberdb_posts
+      DB_HOST: db-posts
+      DB_PORT: 5432
+    depends_on:
+      - db-posts
+
+  revproxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy
+    ports:
+      - 3001:80
+
+  db-posts:
+    container_name: db-posts
+    image: postgres:12
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: jibberjabber
+      POSTGRES_PASSWORD: jibberjabber
+      POSTGRES_DB: jibberjabberdb_posts
+    volumes:
+      - postData:/var/lib/postgresql/data
+
+  jj-user:
+    container_name: jj-user
+    image: docker.pkg.github.com/tomasgp97/jj-user-service/dev-jj-user-service:latest
+    ports:
+      - 8081:8080
+    environment:
+      DB_USER: jibberjabber
+      DB_PASSWORD: jibberjabber
+      DB_NAME: jibberjabberdb
+      DB_HOST: postgres_db
+      DB_PORT: 5432
+    depends_on:
+      - db-users
+
+  db-users:
+    container_name: postgres_db2
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: jibberjabber
+      POSTGRES_PASSWORD: jibberjabber
+      POSTGRES_DB: jibberjabberdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+
+volumes:
+  postData:
+    external: true
+  pgdata:
+    external: true
