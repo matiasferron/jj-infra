@@ -57,7 +57,7 @@ services:
           
     client:
         container_name: jibber-jabber-client
-        image: docker.pkg.github.com/matiasferron/jj-front/dev-jj-fe:latest
+        image: docker.pkg.github.com/matiasferron/jj-front/prod-jj-fe:latest
         depends_on:
             - jj-user
             - jj-posts
