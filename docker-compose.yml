@@ -16,7 +16,7 @@ services:
 
     jj-posts:
         container_name: jj-posts
-        image: docker.pkg.github.com/tomasgp97/jj-post-service/dev-jj-post-service:latest
+        image: docker.pkg.github.com/jj-services/jj-post-service/prod-jj-post-service:latest
         ports:
             - 8082:8080
         environment:
