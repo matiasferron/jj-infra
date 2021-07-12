@@ -73,7 +73,7 @@ services:
         container_name: db-message
         image: postgres:12
         ports:
-            - 5434:5432
+            - 5436:5432
         environment:
             POSTGRES_USER: jibberjabber
             POSTGRES_PASSWORD: jibberjabber
