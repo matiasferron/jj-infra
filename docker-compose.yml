@@ -57,7 +57,7 @@ services:
             
     jj-message:
         container_name: jj-message
-        image: docker.pkg.github.com/tomasgp97/jj-message-service/dev-jj-message-service:latest
+        image: docker.pkg.github.com/tomasgp97/jj-message-service/prod-jj-message-service:latest
         ports:
             - 8083:8080
         environment:
